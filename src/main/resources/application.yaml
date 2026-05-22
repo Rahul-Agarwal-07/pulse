@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: pulse
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pulse?options=-c%20TimeZone=Asia/Kolkata
+    username: pulse
+    password: pulse
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+
+logging:
+  level:
+    org.flywaydb: DEBUG
