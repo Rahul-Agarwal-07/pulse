@@ -1,15 +1,27 @@
 package com.rahul.pulse.auth.domain.model;
+
+import java.util.Objects;
 import java.util.UUID;
 
-public class UserId {
+public record UserId(
+        UUID value
+) {
 
-    private final UUID value;
+    public UserId {
 
-    public UserId(UUID value) {
-        this.value = value;
+        Objects.requireNonNull(
+                value,
+                "User id cannot be null"
+        );
+
     }
 
-    public UUID value() {
-        return value;
+    public static UserId generate() {
+
+        return new UserId(
+                UUID.randomUUID()
+        );
+
     }
+
 }
