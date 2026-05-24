@@ -4,10 +4,13 @@ import com.rahul.pulse.auth.domain.model.Email;
 import com.rahul.pulse.auth.domain.model.User;
 import com.rahul.pulse.auth.domain.model.UserId;
 
+import java.util.Optional;
+
 public interface UserRepository {
 
-    boolean existsById(UserId userId);
+    Optional<User> findById(UserId id);
+    Optional<User> findByEmail(Email email);
     boolean existsByEmail(Email email);
-    boolean save(User user);
+    void save(User user);
 
 }

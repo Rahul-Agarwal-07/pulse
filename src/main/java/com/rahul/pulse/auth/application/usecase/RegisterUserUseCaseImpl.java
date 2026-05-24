@@ -1,8 +1,6 @@
 package com.rahul.pulse.auth.application.usecase;
-
-
 import com.rahul.pulse.auth.application.dto.RegisterUserCommand;
-import com.rahul.pulse.auth.application.ports.PasswordEncoder;
+import com.rahul.pulse.auth.application.ports.PasswordHasher;
 import com.rahul.pulse.auth.application.ports.RegisterUserUseCase;
 import com.rahul.pulse.auth.domain.model.Email;
 import com.rahul.pulse.auth.domain.model.PasswordHash;
@@ -13,11 +11,11 @@ import com.rahul.pulse.common.exception.UserAlreadyExistsException;
 public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
 
     final UserRepository userRepository;
-    final PasswordEncoder passwordEncoder;
+    final PasswordHasher passwordHasher;
 
-    public RegisterUserUseCaseImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public RegisterUserUseCaseImpl(UserRepository userRepository, PasswordHasher passwordHasher) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.passwordHasher = passwordHasher;
     }
 
     @Override
@@ -28,7 +26,8 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
         if(userRepository.existsByEmail(email))
             throw new UserAlreadyExistsException();
 
-        PasswordHash passwordHash = new PasswordHash(command.password());
+        String hash = passwordHasher.encode(command.password());
+        PasswordHash passwordHash = new PasswordHash(hash);
 
         User user = User.create(
                 email,
