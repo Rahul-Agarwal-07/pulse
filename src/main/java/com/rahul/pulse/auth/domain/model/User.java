@@ -73,6 +73,22 @@ public class User {
 
     }
 
+    public static User restore(
+            Email email,
+            PasswordHash passwordHash,
+            String fullName,
+            UserId id
+    )
+    {
+        return new User(
+                id,
+                email,
+                passwordHash,
+                fullName,
+                Instant.now()
+        );
+    }
+
     private void validateFullName(
             String fullName
     ) {
