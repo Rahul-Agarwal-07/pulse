@@ -1,6 +1,6 @@
 package com.rahul.pulse.auth.domain.model;
 
-import com.rahul.pulse.common.exception.InvalidEmailException;
+import com.rahul.pulse.auth.domain.exception.InvalidEmailException;
 
 import java.util.Objects;
 import java.util.regex.Pattern;

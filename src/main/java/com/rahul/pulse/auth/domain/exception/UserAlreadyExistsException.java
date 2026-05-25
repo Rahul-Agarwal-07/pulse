@@ -1,4 +1,6 @@
-package com.rahul.pulse.common.exception;
+package com.rahul.pulse.auth.domain.exception;
+
+import com.rahul.pulse.common.exception.DomainException;
 
 public class UserAlreadyExistsException extends DomainException {
     public UserAlreadyExistsException(String message) {

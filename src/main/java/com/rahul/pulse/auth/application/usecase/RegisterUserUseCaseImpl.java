@@ -7,7 +7,7 @@ import com.rahul.pulse.auth.domain.model.Email;
 import com.rahul.pulse.auth.domain.model.PasswordHash;
 import com.rahul.pulse.auth.domain.model.User;
 import com.rahul.pulse.auth.domain.repository.UserRepository;
-import com.rahul.pulse.common.exception.UserAlreadyExistsException;
+import com.rahul.pulse.auth.domain.exception.UserAlreadyExistsException;
 
 public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
 
