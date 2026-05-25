@@ -1,9 +1,10 @@
 package com.rahul.pulse.auth.application.ports;
 
 import com.rahul.pulse.auth.application.dto.RegisterUserCommand;
+import com.rahul.pulse.auth.application.dto.RegisterUserResult;
 
 public interface RegisterUserUseCase {
 
-    void register(RegisterUserCommand command);
+    RegisterUserResult register(RegisterUserCommand command);
 
 }

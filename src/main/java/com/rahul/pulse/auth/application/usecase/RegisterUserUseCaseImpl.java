@@ -1,5 +1,6 @@
 package com.rahul.pulse.auth.application.usecase;
 import com.rahul.pulse.auth.application.dto.RegisterUserCommand;
+import com.rahul.pulse.auth.application.dto.RegisterUserResult;
 import com.rahul.pulse.auth.application.ports.PasswordHasher;
 import com.rahul.pulse.auth.application.ports.RegisterUserUseCase;
 import com.rahul.pulse.auth.domain.model.Email;
@@ -19,7 +20,7 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
     }
 
     @Override
-    public void register(RegisterUserCommand command) {
+    public RegisterUserResult register(RegisterUserCommand command) {
 
         Email email = new Email(command.email());
 
@@ -36,5 +37,10 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
         );
 
         userRepository.save(user);
+
+        return new RegisterUserResult(
+                user.getId().value().toString(),
+                user.getEmail().value()
+        );
     }
 }
