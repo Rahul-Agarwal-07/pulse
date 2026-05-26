@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Getter
@@ -28,7 +29,11 @@ public class UserEntity {
     )
     private String passwordHash;
 
-    private String fullName;
+    private String firstName;
+
+    private String lastName;
+
+    private Instant createdAt;
 
     protected UserEntity() {}
 
@@ -36,12 +41,16 @@ public class UserEntity {
             UUID id,
             String email,
             String passwordHash,
-            String fullName
+            String firstName,
+            String lastName,
+            Instant createdAt
     ) {
         this.id = id;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.fullName = fullName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.createdAt = createdAt;
     }
 
 }

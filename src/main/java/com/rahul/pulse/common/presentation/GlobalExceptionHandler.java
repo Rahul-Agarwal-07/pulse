@@ -41,10 +41,10 @@ public class GlobalExceptionHandler {
                         .getFieldErrors()
                         .stream()
                         .findFirst()
-                        .map(err -> err.getDefaultMessage())
+                        .map(err -> err.getField() + " " + err.getDefaultMessage())
                         .orElse("Validation failed");
 
-        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return buildError(HttpStatus.BAD_REQUEST, message);
     }
 
     private ResponseEntity<ErrorResponse> buildError(

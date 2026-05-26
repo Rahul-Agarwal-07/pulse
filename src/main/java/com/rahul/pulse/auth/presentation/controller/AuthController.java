@@ -29,7 +29,8 @@ public class AuthController {
         RegisterUserCommand command = new RegisterUserCommand(
                 request.email(),
                 request.password(),
-                request.fullName()
+                request.firstName(),
+                request.lastName()
         );
 
         final RegisterUserResult res = registerUserUseCase.register(command);

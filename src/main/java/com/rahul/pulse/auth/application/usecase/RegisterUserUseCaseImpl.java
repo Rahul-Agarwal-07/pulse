@@ -33,7 +33,8 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
         User user = User.create(
                 email,
                 passwordHash,
-                command.fullName()
+                command.firstName(),
+                command.lastName()
         );
 
         userRepository.save(user);

@@ -21,7 +21,11 @@ public class UserMapper {
                 user.getPasswordHash()
                         .value(),
 
-                user.getFullName()
+                user.getFirstName(),
+
+                user.getLastName(),
+
+                user.getCreatedAt()
         );
     }
 
@@ -39,11 +43,11 @@ public class UserMapper {
                                 .getPasswordHash()
                 ),
 
-                entity.getFullName(),
+                entity.getFirstName(),
 
-                new UserId(
-                        entity.getId()
-                )
+                entity.getLastName(),
+
+                new UserId(entity.getId())
         );
     }
 

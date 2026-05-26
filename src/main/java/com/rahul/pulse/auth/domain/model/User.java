@@ -10,7 +10,9 @@ public class User {
 
     private PasswordHash passwordHash;
 
-    private String fullName;
+    private String firstName;
+
+    private String lastName;
 
     private final Instant createdAt;
 
@@ -18,7 +20,8 @@ public class User {
             UserId id,
             Email email,
             PasswordHash passwordHash,
-            String fullName,
+            String firstName,
+            String lastName,
             Instant createdAt
     ) {
 
@@ -33,12 +36,11 @@ public class User {
                         passwordHash
                 );
 
-        validateFullName(
-                fullName
-        );
+        validateName(firstName);
+        validateName(lastName);
 
-        this.fullName =
-                fullName.trim();
+        this.firstName = firstName.trim();
+        this.lastName = lastName.trim();
 
         this.createdAt =
                 Objects.requireNonNull(
@@ -53,7 +55,9 @@ public class User {
 
             PasswordHash passwordHash,
 
-            String fullName
+            String firstName,
+
+            String lastName
 
     ) {
 
@@ -65,7 +69,9 @@ public class User {
 
                 passwordHash,
 
-                fullName,
+                firstName,
+
+                lastName,
 
                 Instant.now()
 
@@ -76,7 +82,8 @@ public class User {
     public static User restore(
             Email email,
             PasswordHash passwordHash,
-            String fullName,
+            String firstName,
+            String lastName,
             UserId id
     )
     {
@@ -84,12 +91,13 @@ public class User {
                 id,
                 email,
                 passwordHash,
-                fullName,
+                firstName,
+                lastName,
                 Instant.now()
         );
     }
 
-    private void validateFullName(
+    private void validateName(
             String fullName
     ) {
 
@@ -119,8 +127,12 @@ public class User {
         return passwordHash;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public Instant getCreatedAt() {
