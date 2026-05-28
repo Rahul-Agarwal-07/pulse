@@ -74,6 +74,8 @@ public class RegisterUserUseCaseImplTest {
                 savedUser.getEmail().value()
         );
 
+        assertEquals("hashed-password", savedUser.getPasswordHash().value());
+
         verify(userRepository, times(1)).existsByEmail(any(Email.class));
         verify(passwordHasher, times(1)).encode(any(String.class));
 
