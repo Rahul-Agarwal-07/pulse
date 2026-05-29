@@ -1,5 +1,6 @@
 package com.rahul.pulse.common.presentation;
 
+import com.rahul.pulse.auth.domain.exception.InvalidCredentialsException;
 import com.rahul.pulse.auth.domain.exception.InvalidEmailException;
 import com.rahul.pulse.auth.domain.exception.InvalidPasswordHashException;
 import com.rahul.pulse.auth.domain.exception.UserAlreadyExistsException;
@@ -28,6 +29,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidPasswordHashException.class)
     public ResponseEntity<ErrorResponse> handleInvalidPasswordHashException(InvalidPasswordHashException ex)
+    {
+        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentialsException(InvalidCredentialsException ex)
     {
         return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }

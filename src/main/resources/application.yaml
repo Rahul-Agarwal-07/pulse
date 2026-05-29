@@ -15,3 +15,9 @@ spring:
 logging:
   level:
     org.flywaydb: DEBUG
+
+security:
+  jwt:
+    secret: myverysecuresecretkeythatismorethan32chars
+    access-token-expiration: 900000
+    refresh-token-expiration: 604800000
