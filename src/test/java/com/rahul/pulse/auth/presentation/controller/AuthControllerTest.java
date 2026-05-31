@@ -1,8 +1,12 @@
 package com.rahul.pulse.auth.presentation.controller;
 
+import com.rahul.pulse.auth.application.dto.LoginUserCommand;
+import com.rahul.pulse.auth.application.dto.LoginUserResult;
 import com.rahul.pulse.auth.application.dto.RegisterUserCommand;
 import com.rahul.pulse.auth.application.dto.RegisterUserResult;
+import com.rahul.pulse.auth.application.ports.LoginUserUseCase;
 import com.rahul.pulse.auth.application.ports.RegisterUserUseCase;
+import com.rahul.pulse.auth.domain.exception.InvalidCredentialsException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,9 @@ public class AuthControllerTest {
     @MockitoBean
     private RegisterUserUseCase registerUserUseCase;
 
+    @MockitoBean
+    private LoginUserUseCase loginUserUseCase;
+
     @Test
     void should_register_user_successfully() throws Exception
     {
@@ -63,6 +70,56 @@ public class AuthControllerTest {
                 .andExpect(
                         jsonPath("$.email").value("example@domain.com")
                 );
+    }
+
+    @Test
+    void should_login_user_successfully() throws Exception
+    {
+        LoginUserResult result = new LoginUserResult(
+                UUID.randomUUID().toString(),
+                "accessToken",
+                "refreshToken"
+        );
+
+        when(loginUserUseCase.login(any(LoginUserCommand.class)))
+                .thenReturn(result);
+
+        String requestBody = """
+                {
+                    "email":"example@domain.com",
+                    "password":"password123"
+                }
+                """;
+
+        mockMvc.perform(
+                post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken").value("accessToken"))
+                .andExpect(jsonPath("$.refreshToken").value("refreshToken"));
+    }
+
+    @Test
+    void should_return_401_when_credentials_invalid() throws Exception
+    {
+        when(loginUserUseCase.login(any(LoginUserCommand.class)))
+                .thenThrow(InvalidCredentialsException.class);
+
+        String requestBody = """
+                {
+                    "email":"example@domain.com",
+                    "password":"password123"
+                }
+                """;
+
+        mockMvc.perform(
+                        post("/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestBody)
+                )
+                .andExpect(status().isUnauthorized());
     }
 
 }
