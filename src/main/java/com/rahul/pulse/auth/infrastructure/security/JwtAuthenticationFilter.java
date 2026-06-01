@@ -1,6 +1,6 @@
 package com.rahul.pulse.auth.infrastructure.security;
 
-import com.rahul.pulse.auth.application.usecase.TokenParser;
+import com.rahul.pulse.auth.application.ports.TokenParser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
