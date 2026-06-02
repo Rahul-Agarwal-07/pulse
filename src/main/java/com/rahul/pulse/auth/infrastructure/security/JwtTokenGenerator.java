@@ -38,6 +38,7 @@ public class JwtTokenGenerator implements TokenGenerator {
         return Jwts.builder()
                 .subject(user.getId().value().toString())
                 .claim("email", user.getEmail().value())
+                .claim("type", "access")
                 .expiration(expiry)
                 .issuedAt(now)
                 .issuer("pulse")
@@ -56,6 +57,7 @@ public class JwtTokenGenerator implements TokenGenerator {
 
         return Jwts.builder()
                 .subject(user.getId().value().toString())
+                .claim("type", "refresh")
                 .expiration(expiry)
                 .issuedAt(now)
                 .issuer("pulse")

@@ -2,50 +2,86 @@ package com.rahul.pulse.auth.application.usecase;
 
 import com.rahul.pulse.auth.application.dto.RefreshTokenCommand;
 import com.rahul.pulse.auth.application.dto.RefreshTokenResult;
-import com.rahul.pulse.auth.application.ports.RefreshTokenUseCase;
-import com.rahul.pulse.auth.application.ports.TokenGenerator;
-import com.rahul.pulse.auth.application.ports.TokenParser;
-import com.rahul.pulse.auth.domain.exception.InvalidCredentialsException;
+import com.rahul.pulse.auth.application.ports.*;
+import com.rahul.pulse.auth.domain.exception.InvalidTokenException;
+import com.rahul.pulse.auth.domain.exception.RefreshTokenReuseDetectedException;
+import com.rahul.pulse.auth.domain.model.RefreshToken;
 import com.rahul.pulse.auth.domain.model.User;
-import com.rahul.pulse.auth.domain.model.UserId;
+import com.rahul.pulse.auth.domain.repository.RefreshTokenRepository;
 import com.rahul.pulse.auth.domain.repository.UserRepository;
+import com.rahul.pulse.common.exception.UnauthorizedAccessException;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
+@Transactional
 public class RefreshTokenUseCaseImpl implements RefreshTokenUseCase {
 
     final TokenGenerator tokenGenerator;
-    final TokenParser tokenParser;
+    final TokenParser parser;
+    final TokenHasher hasher;
+    final RefreshTokenRepository refreshTokenRepository;
     final UserRepository userRepository;
 
-    public RefreshTokenUseCaseImpl(TokenGenerator tokenGenerator, TokenParser tokenParser, UserRepository userRepository) {
+    public RefreshTokenUseCaseImpl(TokenGenerator tokenGenerator, TokenParser parser, TokenHasher hasher, RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
         this.tokenGenerator = tokenGenerator;
-        this.tokenParser = tokenParser;
+        this.parser = parser;
+        this.hasher = hasher;
+        this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
     }
-
 
     @Override
     public RefreshTokenResult refresh(RefreshTokenCommand command) {
 
-        if (!tokenParser.isValid(command.refreshToken()))
-            throw new InvalidCredentialsException("Invalid Token");
+        String token = command.refreshToken();
 
-        if (!tokenParser.isRefreshToken(command.refreshToken()))
-            throw new InvalidCredentialsException("Invalid Token");
+        if(!parser.isValid(token))
+            throw new InvalidTokenException();
 
-        String userId = tokenParser.extractUserId(command.refreshToken());
+        if(!parser.isRefreshToken(token))
+            throw new InvalidTokenException();
 
-        User user = userRepository.findById(
-                new UserId(UUID.fromString(userId))
-        ).orElseThrow(InvalidCredentialsException::new);
+        String tokenHash = hasher.hash(token);
 
-        String refreshToken = tokenGenerator.generateRefreshToken(user);
+        RefreshToken refreshToken = refreshTokenRepository.findByTokenHash(tokenHash)
+                .orElseThrow(InvalidTokenException::new);
+
+        if(refreshToken.isRevoked())
+        {
+            refreshTokenRepository.revokeAllByUserId(refreshToken.getUserId());
+            throw new RefreshTokenReuseDetectedException();
+        }
+
+        Instant now = Instant.now();
+
+        if(now.isAfter(refreshToken.getExpiresAt()))
+            throw new InvalidTokenException("Token Expired");
+
+        User user = userRepository.findById(refreshToken.getUserId())
+                .orElseThrow(InvalidTokenException::new);
+
+        String newRefreshToken = tokenGenerator.generateRefreshToken(user);
+        String newRefreshTokenHash = hasher.hash(newRefreshToken);
+
+        refreshTokenRepository.revoke(refreshToken.getId());
+
+        RefreshToken newRefreshTokenModel = new RefreshToken(
+                refreshToken.getUserId(),
+                newRefreshTokenHash,
+                now.plus(7, ChronoUnit.DAYS),
+                false,
+                now
+        );
+
+        refreshTokenRepository.save(newRefreshTokenModel);
+
         String accessToken = tokenGenerator.generateAccessToken(user);
 
         return new RefreshTokenResult(
-                refreshToken,
-                accessToken
+                accessToken,
+                newRefreshToken
         );
     }
 }
