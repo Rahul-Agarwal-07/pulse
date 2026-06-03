@@ -65,7 +65,9 @@ public class RefreshTokenUseCaseImpl implements RefreshTokenUseCase {
         String newRefreshToken = tokenGenerator.generateRefreshToken(user);
         String newRefreshTokenHash = hasher.hash(newRefreshToken);
 
-        refreshTokenRepository.revoke(refreshToken.getId());
+        int updated = refreshTokenRepository.revoke(refreshToken.getId());
+
+        if(updated == 0) throw new InvalidTokenException();
 
         RefreshToken newRefreshTokenModel = new RefreshToken(
                 refreshToken.getUserId(),

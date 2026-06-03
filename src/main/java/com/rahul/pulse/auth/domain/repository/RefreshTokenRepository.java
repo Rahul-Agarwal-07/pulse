@@ -12,8 +12,8 @@ public interface RefreshTokenRepository {
 
     Optional<RefreshToken> findByTokenHash(String hash);
 
-    void revoke(RefreshTokenId id);
+    int revoke(RefreshTokenId id);
 
-    void revokeAllByUserId(UserId userId);
+    int revokeAllByUserId(UserId userId);
 
 }
