@@ -9,7 +9,6 @@ import com.rahul.pulse.auth.domain.model.RefreshToken;
 import com.rahul.pulse.auth.domain.model.User;
 import com.rahul.pulse.auth.domain.repository.RefreshTokenRepository;
 import com.rahul.pulse.auth.domain.repository.UserRepository;
-import com.rahul.pulse.common.exception.UnauthorizedAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;

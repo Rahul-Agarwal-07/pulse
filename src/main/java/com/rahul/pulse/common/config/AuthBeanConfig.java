@@ -1,11 +1,9 @@
 package com.rahul.pulse.common.config;
 
-import com.rahul.pulse.auth.application.ports.LoginUserUseCase;
-import com.rahul.pulse.auth.application.ports.PasswordHasher;
-import com.rahul.pulse.auth.application.ports.RegisterUserUseCase;
-import com.rahul.pulse.auth.application.ports.TokenGenerator;
+import com.rahul.pulse.auth.application.ports.*;
 import com.rahul.pulse.auth.application.usecase.LoginUserUseCaseImpl;
 import com.rahul.pulse.auth.application.usecase.RegisterUserUseCaseImpl;
+import com.rahul.pulse.auth.domain.repository.RefreshTokenRepository;
 import com.rahul.pulse.auth.domain.repository.UserRepository;
 import com.rahul.pulse.auth.infrastructure.persistence.repository.UserRepositoryAdapter;
 import com.rahul.pulse.auth.infrastructure.security.BCryptPasswordHasher;
@@ -36,12 +34,16 @@ public class AuthBeanConfig {
     public LoginUserUseCase loginUserUseCase(
             UserRepository userRepository,
             TokenGenerator tokenGenerator,
-            PasswordHasher passwordHasher
+            PasswordHasher passwordHasher,
+            RefreshTokenRepository refreshTokenRepository,
+            TokenHasher tokenHasher
     ){
         return new LoginUserUseCaseImpl(
                 userRepository,
+                refreshTokenRepository,
                 tokenGenerator,
-                passwordHasher
+                passwordHasher,
+                tokenHasher
         );
     }
 }

@@ -5,10 +5,12 @@ import com.rahul.pulse.auth.application.dto.LoginUserResult;
 import com.rahul.pulse.auth.application.ports.LoginUserUseCase;
 import com.rahul.pulse.auth.application.ports.PasswordHasher;
 import com.rahul.pulse.auth.application.ports.TokenGenerator;
+import com.rahul.pulse.auth.application.ports.TokenHasher;
 import com.rahul.pulse.auth.domain.exception.InvalidCredentialsException;
 import com.rahul.pulse.auth.domain.model.Email;
 import com.rahul.pulse.auth.domain.model.PasswordHash;
 import com.rahul.pulse.auth.domain.model.User;
+import com.rahul.pulse.auth.domain.repository.RefreshTokenRepository;
 import com.rahul.pulse.auth.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,8 @@ public class LoginUserUseCaseTest {
     private UserRepository userRepository;
     private TokenGenerator tokenGenerator;
     private PasswordHasher passwordHasher;
+    private RefreshTokenRepository refreshTokenRepository;
+    private TokenHasher tokenHasher;
 
     private LoginUserUseCase loginUserUseCase;
 
@@ -32,11 +36,15 @@ public class LoginUserUseCaseTest {
         userRepository = mock(UserRepository.class);
         tokenGenerator = mock(TokenGenerator.class);
         passwordHasher = mock(PasswordHasher.class);
+        tokenHasher = mock(TokenHasher.class);
+        refreshTokenRepository = mock(RefreshTokenRepository.class);
 
         loginUserUseCase = new LoginUserUseCaseImpl(
                 userRepository,
+                refreshTokenRepository,
                 tokenGenerator,
-                passwordHasher
+                passwordHasher,
+                tokenHasher
         );
     }
 

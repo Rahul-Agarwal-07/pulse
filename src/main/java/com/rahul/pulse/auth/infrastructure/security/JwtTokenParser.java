@@ -45,4 +45,19 @@ public class JwtTokenParser implements TokenParser {
 
     }
 
+    @Override
+    public boolean isRefreshToken(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            return claims.get("type") == "refresh";
+        }catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
 }
