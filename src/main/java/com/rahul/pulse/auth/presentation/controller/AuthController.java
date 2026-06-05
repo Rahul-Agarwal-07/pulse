@@ -1,15 +1,10 @@
 package com.rahul.pulse.auth.presentation.controller;
 
-import com.rahul.pulse.auth.application.dto.LoginUserCommand;
-import com.rahul.pulse.auth.application.dto.LoginUserResult;
-import com.rahul.pulse.auth.application.dto.RegisterUserCommand;
-import com.rahul.pulse.auth.application.dto.RegisterUserResult;
+import com.rahul.pulse.auth.application.dto.*;
 import com.rahul.pulse.auth.application.ports.LoginUserUseCase;
+import com.rahul.pulse.auth.application.ports.RefreshTokenUseCase;
 import com.rahul.pulse.auth.application.ports.RegisterUserUseCase;
-import com.rahul.pulse.auth.presentation.dto.LoginRequest;
-import com.rahul.pulse.auth.presentation.dto.LoginResponse;
-import com.rahul.pulse.auth.presentation.dto.RegisterRequest;
-import com.rahul.pulse.auth.presentation.dto.RegisterResponse;
+import com.rahul.pulse.auth.presentation.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +17,12 @@ public class AuthController {
 
     private final RegisterUserUseCase registerUserUseCase;
     private final LoginUserUseCase loginUserUseCase;
+    private final RefreshTokenUseCase refreshTokenUseCase;
 
-    public AuthController(RegisterUserUseCase registerUserUseCase, LoginUserUseCase loginUserUseCase) {
+    public AuthController(RegisterUserUseCase registerUserUseCase, LoginUserUseCase loginUserUseCase, RefreshTokenUseCase refreshTokenUseCase) {
         this.registerUserUseCase = registerUserUseCase;
         this.loginUserUseCase = loginUserUseCase;
+        this.refreshTokenUseCase = refreshTokenUseCase;
     }
 
     @PostMapping("/register")
@@ -66,6 +63,27 @@ public class AuthController {
                                 result.refreshToken()
                         )
                 );
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshResponse> refresh(
+            @RequestHeader("Refresh-Token") String refreshToken
+    )
+    {
+        System.out.println("Controller reached");
+
+        RefreshTokenCommand command = new RefreshTokenCommand(refreshToken);
+
+        final RefreshTokenResult result = refreshTokenUseCase.refresh(command);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(
+                        new RefreshResponse(
+                                result.accessToken(),
+                                result.refreshToken()
+                        )
+                );
+
     }
 
     @GetMapping("/me")

@@ -54,7 +54,8 @@ public class JwtTokenParser implements TokenParser {
                     .parseSignedClaims(token)
                     .getPayload();
 
-            return claims.get("type") == "refresh";
+            return claims.get("type").equals("refresh");
+
         }catch (JwtException | IllegalArgumentException e) {
             return false;
         }

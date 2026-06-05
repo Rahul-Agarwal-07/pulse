@@ -1,9 +1,6 @@
 package com.rahul.pulse.common.presentation;
 
-import com.rahul.pulse.auth.domain.exception.InvalidCredentialsException;
-import com.rahul.pulse.auth.domain.exception.InvalidEmailException;
-import com.rahul.pulse.auth.domain.exception.InvalidPasswordHashException;
-import com.rahul.pulse.auth.domain.exception.UserAlreadyExistsException;
+import com.rahul.pulse.auth.domain.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -37,6 +34,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleInvalidCredentialsException(InvalidCredentialsException ex)
     {
         return buildError(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidTokenException(InvalidTokenException e)
+    {
+        return buildError(HttpStatus.UNAUTHORIZED, e.getMessage());
+    }
+
+    @ExceptionHandler(RefreshTokenReuseDetectedException.class)
+    public ResponseEntity<ErrorResponse> handleRefreshTokenReuseDetectedException(RefreshTokenReuseDetectedException e)
+    {
+        return buildError(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

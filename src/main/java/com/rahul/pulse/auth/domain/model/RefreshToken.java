@@ -17,6 +17,23 @@ public class RefreshToken {
 
     private Instant createdAt;
 
+    private RefreshToken(
+            RefreshTokenId refreshTokenId,
+            UserId userId,
+            String tokenHash,
+            Instant expiresAt,
+            boolean revoked,
+            Instant createdAt
+    )
+    {
+        this.id = refreshTokenId;
+        this.userId = userId;
+        this.tokenHash = tokenHash;
+        this.expiresAt = expiresAt;
+        this.revoked = revoked;
+        this.createdAt = createdAt;
+    }
+
     public RefreshToken(
             UserId userId,
             String tokenHash,
@@ -30,6 +47,25 @@ public class RefreshToken {
         this.expiresAt = expiresAt;
         this.revoked = revoked;
         this.createdAt = createdAt;
+    }
+
+    public static RefreshToken restore(
+            RefreshTokenId refreshTokenId,
+            UserId userId,
+            String tokenHash,
+            Instant expiresAt,
+            boolean revoked,
+            Instant createdAt
+    )
+    {
+        return new RefreshToken(
+                refreshTokenId,
+                userId,
+                tokenHash,
+                expiresAt,
+                revoked,
+                createdAt
+        );
     }
 
     public RefreshTokenId getId() {

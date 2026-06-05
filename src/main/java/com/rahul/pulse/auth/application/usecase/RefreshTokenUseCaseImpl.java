@@ -39,13 +39,19 @@ public class RefreshTokenUseCaseImpl implements RefreshTokenUseCase {
         if(!parser.isValid(token))
             throw new InvalidTokenException();
 
+        System.out.println("Token is Valid");
+
         if(!parser.isRefreshToken(token))
             throw new InvalidTokenException();
+
+        System.out.println("Token is Refresh Token");
 
         String tokenHash = hasher.hash(token);
 
         RefreshToken refreshToken = refreshTokenRepository.findByTokenHash(tokenHash)
                 .orElseThrow(InvalidTokenException::new);
+
+        System.out.println("Token : " + refreshToken);
 
         if(refreshToken.isRevoked())
         {
@@ -58,15 +64,23 @@ public class RefreshTokenUseCaseImpl implements RefreshTokenUseCase {
         if(now.isAfter(refreshToken.getExpiresAt()))
             throw new InvalidTokenException("Token Expired");
 
+        System.out.println("Token is not expired");
+
         User user = userRepository.findById(refreshToken.getUserId())
                 .orElseThrow(InvalidTokenException::new);
+
+        System.out.println("User : " + user);
 
         String newRefreshToken = tokenGenerator.generateRefreshToken(user);
         String newRefreshTokenHash = hasher.hash(newRefreshToken);
 
         int updated = refreshTokenRepository.revoke(refreshToken.getId());
 
+        System.out.println("Updated rows = " + updated);
+
         if(updated == 0) throw new InvalidTokenException();
+
+        System.out.println("Old token is revoked");
 
         RefreshToken newRefreshTokenModel = new RefreshToken(
                 refreshToken.getUserId(),

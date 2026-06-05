@@ -1,6 +1,7 @@
 package com.rahul.pulse.auth.infrastructure.persistence.mapper;
 
 import com.rahul.pulse.auth.domain.model.RefreshToken;
+import com.rahul.pulse.auth.domain.model.RefreshTokenId;
 import com.rahul.pulse.auth.domain.model.UserId;
 import com.rahul.pulse.auth.infrastructure.persistence.entity.RefreshTokenEntity;
 
@@ -20,7 +21,8 @@ public class RefreshTokenMapper {
 
     static public RefreshToken toDomain(RefreshTokenEntity entity)
     {
-        return new RefreshToken(
+        return RefreshToken.restore(
+                new RefreshTokenId(entity.getId()),
                 new UserId(entity.getUserId()),
                 entity.getTokenHash(),
                 entity.getExpiresAt(),
