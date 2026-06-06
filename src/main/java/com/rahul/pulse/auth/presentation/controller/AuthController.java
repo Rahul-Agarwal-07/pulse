@@ -76,7 +76,7 @@ public class AuthController {
 
         final RefreshTokenResult result = refreshTokenUseCase.refresh(command);
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(
                         new RefreshResponse(
                                 result.accessToken(),

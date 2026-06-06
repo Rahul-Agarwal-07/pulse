@@ -1,12 +1,11 @@
 package com.rahul.pulse.auth.presentation.controller;
 
-import com.rahul.pulse.auth.application.dto.LoginUserCommand;
-import com.rahul.pulse.auth.application.dto.LoginUserResult;
-import com.rahul.pulse.auth.application.dto.RegisterUserCommand;
-import com.rahul.pulse.auth.application.dto.RegisterUserResult;
+import com.rahul.pulse.auth.application.dto.*;
 import com.rahul.pulse.auth.application.ports.LoginUserUseCase;
+import com.rahul.pulse.auth.application.ports.RefreshTokenUseCase;
 import com.rahul.pulse.auth.application.ports.RegisterUserUseCase;
 import com.rahul.pulse.auth.domain.exception.InvalidCredentialsException;
+import com.rahul.pulse.auth.infrastructure.security.JwtAuthenticationFilter;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -40,6 +40,14 @@ public class AuthControllerTest {
 
     @MockitoBean
     private LoginUserUseCase loginUserUseCase;
+
+    @MockitoBean
+    private RefreshTokenUseCase refreshTokenUseCase;
+
+    @MockitoBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+
 
     @Test
     void should_register_user_successfully() throws Exception
@@ -120,6 +128,43 @@ public class AuthControllerTest {
                                 .content(requestBody)
                 )
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void should_rotate_token_when_token_is_valid() throws Exception {
+        RefreshTokenResult result = new RefreshTokenResult(
+                "new-access-token",
+                "new-refresh-token"
+        );
+
+        when(refreshTokenUseCase.refresh(any(RefreshTokenCommand.class)))
+                .thenReturn(result);
+
+        mockMvc.perform(
+                post("/auth/refresh")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Refresh-Token", "old-refresh-token")
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken").value("new-access-token"))
+                .andExpect(jsonPath("$.refreshToken").value("new-refresh-token"));
+
+        verify(refreshTokenUseCase).refresh(any(RefreshTokenCommand.class));
+    }
+
+    @Test
+    void should_return_401_when_token_is_invalid() throws Exception {
+        when(refreshTokenUseCase.refresh(any(RefreshTokenCommand.class)))
+                .thenThrow(InvalidCredentialsException.class);
+
+        mockMvc.perform(
+                        post("/auth/refresh")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Refresh-Token", "old-refresh-token")
+                )
+                .andExpect(status().isUnauthorized());
+
+        verify(refreshTokenUseCase).refresh(any(RefreshTokenCommand.class));
     }
 
 }
