@@ -1,5 +1,6 @@
 package com.rahul.pulse.auth.presentation.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.rahul.pulse.auth.application.dto.*;
 import com.rahul.pulse.auth.application.ports.LoginUserUseCase;
 import com.rahul.pulse.auth.application.ports.RefreshTokenUseCase;
@@ -15,12 +16,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -166,5 +170,6 @@ public class AuthControllerTest {
 
         verify(refreshTokenUseCase).refresh(any(RefreshTokenCommand.class));
     }
+
 
 }

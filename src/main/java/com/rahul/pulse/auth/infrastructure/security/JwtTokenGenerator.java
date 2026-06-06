@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtTokenGenerator implements TokenGenerator {
@@ -39,6 +40,7 @@ public class JwtTokenGenerator implements TokenGenerator {
                 .subject(user.getId().value().toString())
                 .claim("email", user.getEmail().value())
                 .claim("type", "access")
+                .id(UUID.randomUUID().toString())
                 .expiration(expiry)
                 .issuedAt(now)
                 .issuer("pulse")
@@ -58,6 +60,7 @@ public class JwtTokenGenerator implements TokenGenerator {
         return Jwts.builder()
                 .subject(user.getId().value().toString())
                 .claim("type", "refresh")
+                .id(UUID.randomUUID().toString())
                 .expiration(expiry)
                 .issuedAt(now)
                 .issuer("pulse")
