@@ -2,6 +2,7 @@ package com.rahul.pulse.auth.presentation.controller;
 
 import com.rahul.pulse.auth.application.dto.*;
 import com.rahul.pulse.auth.application.ports.LoginUserUseCase;
+import com.rahul.pulse.auth.application.ports.LogoutUseCase;
 import com.rahul.pulse.auth.application.ports.RefreshTokenUseCase;
 import com.rahul.pulse.auth.application.ports.RegisterUserUseCase;
 import com.rahul.pulse.auth.presentation.dto.*;
@@ -18,11 +19,13 @@ public class AuthController {
     private final RegisterUserUseCase registerUserUseCase;
     private final LoginUserUseCase loginUserUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
+    private final LogoutUseCase logoutUseCase;
 
-    public AuthController(RegisterUserUseCase registerUserUseCase, LoginUserUseCase loginUserUseCase, RefreshTokenUseCase refreshTokenUseCase) {
+    public AuthController(RegisterUserUseCase registerUserUseCase, LoginUserUseCase loginUserUseCase, RefreshTokenUseCase refreshTokenUseCase, LogoutUseCase logoutUseCase) {
         this.registerUserUseCase = registerUserUseCase;
         this.loginUserUseCase = loginUserUseCase;
         this.refreshTokenUseCase = refreshTokenUseCase;
+        this.logoutUseCase = logoutUseCase;
     }
 
     @PostMapping("/register")
@@ -84,6 +87,15 @@ public class AuthController {
                         )
                 );
 
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @RequestHeader("Refresh-Token") String refreshToken
+    ){
+        LogoutCommand command = new LogoutCommand(refreshToken);
+        logoutUseCase.logout(command);
+        return ResponseEntity.ok(null);
     }
 
     @GetMapping("/me")

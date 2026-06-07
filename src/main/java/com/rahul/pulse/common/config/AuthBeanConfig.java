@@ -2,6 +2,7 @@ package com.rahul.pulse.common.config;
 
 import com.rahul.pulse.auth.application.ports.*;
 import com.rahul.pulse.auth.application.usecase.LoginUserUseCaseImpl;
+import com.rahul.pulse.auth.application.usecase.LogoutUseCaseImpl;
 import com.rahul.pulse.auth.application.usecase.RefreshTokenUseCaseImpl;
 import com.rahul.pulse.auth.application.usecase.RegisterUserUseCaseImpl;
 import com.rahul.pulse.auth.domain.repository.RefreshTokenRepository;
@@ -62,6 +63,21 @@ public class AuthBeanConfig {
                 hasher,
                 refreshTokenRepository,
                 userRepository
+        );
+    }
+
+    @Bean
+    public LogoutUseCase logoutUseCase(
+            RefreshTokenRepository refreshTokenRepository,
+            UserRepository userRepository,
+            TokenParser parser,
+            TokenHasher hasher
+    ){
+        return new LogoutUseCaseImpl(
+                refreshTokenRepository,
+                userRepository,
+                parser,
+                hasher
         );
     }
 }
