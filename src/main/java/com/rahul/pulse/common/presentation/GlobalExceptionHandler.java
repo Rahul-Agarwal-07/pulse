@@ -1,6 +1,7 @@
 package com.rahul.pulse.common.presentation;
 
 import com.rahul.pulse.auth.domain.exception.*;
+import com.rahul.pulse.common.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -46,6 +47,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleRefreshTokenReuseDetectedException(RefreshTokenReuseDetectedException e)
     {
         return buildError(HttpStatus.UNAUTHORIZED, e.getMessage());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException e)
+    {
+        return buildError(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

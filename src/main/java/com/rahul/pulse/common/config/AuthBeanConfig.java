@@ -11,6 +11,10 @@ import com.rahul.pulse.auth.infrastructure.persistence.repository.UserRepository
 import com.rahul.pulse.auth.infrastructure.security.BCryptPasswordHasher;
 import com.rahul.pulse.auth.infrastructure.security.JwtTokenGenerator;
 import com.rahul.pulse.auth.infrastructure.security.config.JwtProperties;
+import com.rahul.pulse.user.application.ports.GetCurrentUserUseCase;
+import com.rahul.pulse.user.application.ports.UpdateCurrentUserUseCase;
+import com.rahul.pulse.user.application.usecase.GetCurrentUserUseCaseImpl;
+import com.rahul.pulse.user.application.usecase.UpdateCurrentUserUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -79,5 +83,19 @@ public class AuthBeanConfig {
                 parser,
                 hasher
         );
+    }
+
+    @Bean
+    public GetCurrentUserUseCase getCurrentUserUseCase(
+            UserRepository userRepository
+    ){
+        return new GetCurrentUserUseCaseImpl(userRepository);
+    }
+
+    @Bean
+    public UpdateCurrentUserUseCase updateCurrentUserUseCase(
+            UserRepository userRepository
+    ){
+        return new UpdateCurrentUserUseCaseImpl(userRepository);
     }
 }

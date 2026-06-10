@@ -115,6 +115,12 @@ public class User {
 
     }
 
+    public void updateProfileName(String firstName, String lastName)
+    {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public UserId getId() {
         return id;
     }

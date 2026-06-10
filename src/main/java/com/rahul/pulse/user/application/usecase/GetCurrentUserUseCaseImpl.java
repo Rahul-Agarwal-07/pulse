@@ -9,9 +9,11 @@ import com.rahul.pulse.common.exception.ResourceNotFoundException;
 import com.rahul.pulse.user.application.dto.GetCurrentUserCommand;
 import com.rahul.pulse.user.application.dto.GetCurrentUserResult;
 import com.rahul.pulse.user.application.ports.GetCurrentUserUseCase;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Transactional(readOnly = true)
 public class GetCurrentUserUseCaseImpl implements GetCurrentUserUseCase {
 
     final UserRepository userRepository;
