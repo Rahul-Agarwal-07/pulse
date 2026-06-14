@@ -1,4 +1,4 @@
-package com.rahul.pulse.users.application.usecase;
+package com.rahul.pulse.user.application.usecase;
 
 import com.rahul.pulse.auth.domain.model.Email;
 import com.rahul.pulse.auth.domain.model.PasswordHash;
@@ -8,7 +8,6 @@ import com.rahul.pulse.common.exception.ResourceNotFoundException;
 import com.rahul.pulse.user.application.dto.GetCurrentUserCommand;
 import com.rahul.pulse.user.application.dto.GetCurrentUserResult;
 import com.rahul.pulse.user.application.ports.GetCurrentUserUseCase;
-import com.rahul.pulse.user.application.usecase.GetCurrentUserUseCaseImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

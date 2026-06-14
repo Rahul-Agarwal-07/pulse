@@ -25,6 +25,8 @@ public class GetCurrentUserUseCaseImpl implements GetCurrentUserUseCase {
     @Override
     public GetCurrentUserResult execute(GetCurrentUserCommand command) {
 
+        System.out.println("Get user");
+
         UserId userId = new UserId(
                 UUID.fromString(command.userId())
         );

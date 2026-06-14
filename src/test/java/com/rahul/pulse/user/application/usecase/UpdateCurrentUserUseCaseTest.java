@@ -1,4 +1,4 @@
-package com.rahul.pulse.users.application.usecase;
+package com.rahul.pulse.user.application.usecase;
 
 import com.rahul.pulse.auth.domain.model.Email;
 import com.rahul.pulse.auth.domain.model.PasswordHash;
@@ -7,7 +7,6 @@ import com.rahul.pulse.auth.domain.repository.UserRepository;
 import com.rahul.pulse.common.exception.ResourceNotFoundException;
 import com.rahul.pulse.user.application.dto.UpdateCurrentUserCommand;
 import com.rahul.pulse.user.application.ports.UpdateCurrentUserUseCase;
-import com.rahul.pulse.user.application.usecase.UpdateCurrentUserUseCaseImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

@@ -51,8 +51,6 @@ public class AuthControllerTest {
     @MockitoBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-
-
     @Test
     void should_register_user_successfully() throws Exception
     {
