@@ -1,6 +1,7 @@
 package com.rahul.pulse.posts.domain.model;
 
 import com.rahul.pulse.auth.domain.model.UserId;
+import com.rahul.pulse.posts.domain.exception.InvalidPostException;
 import lombok.Getter;
 
 import java.time.Instant;
@@ -44,6 +45,14 @@ public class Post {
             String caption,
             String imageUrl
     ){
+
+        if(caption == null || caption.isBlank())
+            throw new InvalidPostException("Caption is required");
+
+        if(imageUrl == null || imageUrl.isBlank())
+            throw new InvalidPostException("Image is required");
+
+
         return new Post(
                 PostId.generate(),
                 authorId,
