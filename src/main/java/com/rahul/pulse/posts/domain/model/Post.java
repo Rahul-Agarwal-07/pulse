@@ -42,8 +42,7 @@ public class Post {
     public static Post create(
             UserId authorId,
             String caption,
-            String imageUrl,
-            Instant updatedAt
+            String imageUrl
     ){
         return new Post(
                 PostId.generate(),
@@ -83,27 +82,41 @@ public class Post {
     public void updateCaption(String updatedCaption)
     {
         this.caption = updatedCaption;
+        updatedAt = Instant.now();
     }
 
     public void incrementLikesCount()
     {
         this.likesCount++;
+        updatedAt = Instant.now();
     }
 
     public void decrementLikesCount()
     {
-        if(likesCount > 0) likesCount--;
+        if(likesCount > 0) {
+            likesCount--;
+            updatedAt = Instant.now();
+        }
     }
 
     public void incrementCommentCount()
     {
         commentCount++;
+        updatedAt = Instant.now();
     }
 
     public void decrementCommentCount()
     {
-        if(commentCount > 0) commentCount--;
+        if(commentCount > 0) {
+            commentCount--;
+            updatedAt = Instant.now();
+        }
     }
 
+    public void updateImageUrl(String newUrl)
+    {
+        this.imageUrl = newUrl;
+        this.updatedAt = Instant.now();
+    }
 
 }
