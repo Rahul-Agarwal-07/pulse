@@ -73,8 +73,6 @@ public class AuthController {
             @RequestHeader("Refresh-Token") String refreshToken
     )
     {
-        System.out.println("Controller reached");
-
         RefreshTokenCommand command = new RefreshTokenCommand(refreshToken);
 
         final RefreshTokenResult result = refreshTokenUseCase.refresh(command);

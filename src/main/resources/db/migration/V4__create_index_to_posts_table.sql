@@ -1,0 +1,1 @@
+CREATE INDEX idx_author_id ON posts(author_id);

@@ -7,6 +7,7 @@ import com.rahul.pulse.posts.application.ports.CreatePostUseCase;
 import com.rahul.pulse.posts.presentation.dto.CreatePostRequest;
 import com.rahul.pulse.posts.presentation.dto.CreatePostResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,7 @@ public class PostController {
         this.createPostUseCase = createPostUseCase;
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<CreatePostResponse> createPost(
             @RequestBody @Valid CreatePostRequest request,
             Authentication authentication
@@ -42,7 +43,7 @@ public class PostController {
 
         CreatePostResult result = createPostUseCase.execute(command);
 
-        return ResponseEntity.ok(
+        return ResponseEntity.status(HttpStatus.CREATED).body(
                 new CreatePostResponse(
                         result.postId().value().toString()
                 )
