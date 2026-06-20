@@ -11,7 +11,7 @@ public interface PostRepository {
 
     Optional<Post> findById(PostId postId);
     List<Optional<Post>> findByAuthorId(UserId authorId);
-    List<Optional<Post>> findAllOrderByCreatedAtDesc();
+
     void save(Post post);
     void delete(PostId postId);
 
