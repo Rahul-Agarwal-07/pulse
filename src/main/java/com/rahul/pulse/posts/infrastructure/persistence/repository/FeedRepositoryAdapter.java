@@ -5,9 +5,11 @@ import com.rahul.pulse.posts.domain.model.FeedPostView;
 import com.rahul.pulse.posts.domain.repository.FeedRepository;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class FeedRepositoryAdapter implements FeedRepository {
 
     private final JpaFeedRepository jpaFeedRepository;

@@ -15,7 +15,7 @@ public interface JpaFeedRepository extends JpaRepository<PostEntity, UUID> {
             SELECT new com.rahul.pulse.posts.domain.model.FeedPostView(
                 p.id,
                 p.authorId,
-                CONCAT(u.firstName + ' ' + u.lastName),
+                CONCAT(CONCAT(u.firstName, ' '), u.lastName),
                 p.caption,
                 p.imageUrl,
                 p.likesCount,
@@ -24,7 +24,7 @@ public interface JpaFeedRepository extends JpaRepository<PostEntity, UUID> {
             )
             FROM PostEntity p
             JOIN UserEntity u
-                ON p.authorId == u.id
+                ON p.authorId = u.id
             ORDER BY p.createdAt DESC
             """)
     List<FeedPostView> getFeed(Pageable pageable);
