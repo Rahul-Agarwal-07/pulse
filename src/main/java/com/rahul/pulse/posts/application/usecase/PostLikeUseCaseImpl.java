@@ -4,9 +4,11 @@ import com.rahul.pulse.posts.application.dto.PostLikeCommand;
 import com.rahul.pulse.posts.application.ports.PostLikeUseCase;
 import com.rahul.pulse.posts.domain.model.PostLike;
 import com.rahul.pulse.posts.domain.repository.PostLikeRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
+@Transactional
 public class PostLikeUseCaseImpl implements PostLikeUseCase {
 
     final PostLikeRepository postLikeRepository;

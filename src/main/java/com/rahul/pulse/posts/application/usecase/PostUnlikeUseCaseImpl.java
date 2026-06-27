@@ -4,7 +4,9 @@ import com.rahul.pulse.posts.application.dto.PostUnlikeCommand;
 import com.rahul.pulse.posts.application.ports.PostUnlikeUseCase;
 import com.rahul.pulse.posts.domain.exception.LikeDoesNotExistsException;
 import com.rahul.pulse.posts.domain.repository.PostLikeRepository;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public class PostUnlikeUseCaseImpl implements PostUnlikeUseCase {
 
     final PostLikeRepository postLikeRepository;
