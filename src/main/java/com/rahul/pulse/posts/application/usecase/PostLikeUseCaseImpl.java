@@ -20,7 +20,6 @@ public class PostLikeUseCaseImpl implements PostLikeUseCase {
     @Override
     public void execute(PostLikeCommand command) {
 
-
         if(postLikeRepository.exists(command.userId(), command.postId()))
             return;
 
