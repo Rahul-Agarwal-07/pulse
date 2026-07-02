@@ -2,6 +2,8 @@ package com.rahul.pulse.common.presentation;
 
 import com.rahul.pulse.auth.domain.exception.*;
 import com.rahul.pulse.common.exception.ResourceNotFoundException;
+import com.rahul.pulse.posts.domain.exception.InvalidPostException;
+import com.rahul.pulse.posts.domain.exception.LikeDoesNotExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -53,6 +55,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException e)
     {
         return buildError(HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(LikeDoesNotExistsException.class)
+    public ResponseEntity<ErrorResponse> handleLikeDoesNotExistsException(LikeDoesNotExistsException e)
+    {
+        return buildError(HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidPostException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPostException(InvalidPostException e)
+    {
+        return buildError(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

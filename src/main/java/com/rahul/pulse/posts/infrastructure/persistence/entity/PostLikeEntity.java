@@ -8,11 +8,11 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "post_like")
+@Table(name = "post_likes")
 public class PostLikeEntity {
 
     @Id
-    private UUID postLikeId;
+    private UUID id;
 
     private UUID userId;
 
@@ -23,7 +23,7 @@ public class PostLikeEntity {
     protected PostLikeEntity() {}
 
     public PostLikeEntity(UUID postLikeId, UUID userId, UUID postId, Instant createdAt) {
-        this.postLikeId = postLikeId;
+        this.id = postLikeId;
         this.userId = userId;
         this.createdAt = createdAt;
         this.postId = postId;
